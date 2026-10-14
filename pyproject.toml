@@ -1,0 +1,109 @@
+[project]
+name = "tplink-deco-mcp-server"
+version = "0.0.0"
+description = "MCP server exposing TP-Link Deco mesh routers (nodes, clients, Wi-Fi, blocklist, fixed IPs) as tools for LLM clients"
+readme = "README.md"
+requires-python = ">=3.14"
+license = { text = "MIT" }
+authors = [{ name = "Rodrigo Roque", email = "rodrigogoncalvesroque@gmail.com" }]
+keywords = ["mcp", "model-context-protocol", "tplink", "deco", "mesh", "wifi", "router"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Home Automation",
+    "Topic :: System :: Networking",
+]
+dependencies = [
+    "mcp>=2.3.0",
+    "tplink-deco-api>=2.0.0",
+]
+
+[project.scripts]
+tplink-deco-mcp-server = "tplink_deco_mcp_server.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/roquerodrigo/tplink-deco-mcp-server"
+Repository = "https://github.com/roquerodrigo/tplink-deco-mcp-server"
+Issues = "https://github.com/roquerodrigo/tplink-deco-mcp-server/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tplink_deco_mcp_server"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "--cov=src/tplink_deco_mcp_server",
+    "--cov-report=term-missing",
+    "--cov-fail-under=90",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "pytest-cov>=7.0",
+]
+lint = [
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[tool.uv]
+default-groups = ["dev", "lint"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.format]
+exclude = ["*.md"]  # ruff formats Python blocks in Markdown; docs keep their own layout
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN401",  # explicit `Any` is already banned by mypy's disallow_any_explicit
+    "COM812",  # trailing commas are the formatter's call
+    "CPY001",  # the licence lives in LICENSE, not in a header on every file
+    "D105",    # magic methods are covered by the class docstring
+    "D107",    # __init__ is covered by the class docstring
+    "D203",    # mutually exclusive with D211, which matches the formatter
+    "D212",    # multi-line summaries start on the line below the quotes
+    "ISC001",  # conflicts with the formatter
+    "TID252",  # modules reach their siblings through relative imports
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.flake8-type-checking]
+# The MCP server reads tool signatures and output models at runtime to build
+# their JSON schemas, so these imports cannot move under TYPE_CHECKING.
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+
+[tool.ruff.lint.per-file-ignores]
+# A tool's boolean switches are named MCP arguments, never positional flags, and
+# its parameter types are read at runtime to build the tool's input schema.
+"src/tplink_deco_mcp_server/tools/*" = ["FBT001", "FBT002", "TC001"]
+"tests/*" = [
+    "D",        # no docstrings required in tests
+    "PLR2004",  # magic numbers in assertions are fine
+    "S101",     # assert is how pytest works
+    "S106",     # fixture credentials are placeholders, never real secrets
+    "SLF001",   # exercising private internals is intentional
+]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = ["src"]
+warn_unreachable = true
+warn_unused_ignores = true
+disallow_any_explicit = true
+plugins = ["pydantic.mypy"]
