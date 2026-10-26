@@ -15,6 +15,7 @@ _READ_ONLY_TOOLS = {
     "list_deco_nodes",
     "get_router_performance",
     "get_system_log",
+    "read_router_form",
     "get_internet_status",
     "get_wifi_configuration",
     "list_clients",
