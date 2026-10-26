@@ -50,9 +50,9 @@ class ConnectionTools:
         Returns per device its MAC, name, IP, the Deco unit (MAC and name),
         `wired` or the Wi-Fi band, whether mesh roaming is on, and, where the
         router reports it, signal bars (0-3), the raw RSSI figure and the
-        current Wi-Fi link rates in Mbit/s. Some firmware reports signal only
-        for part of the devices; those fields are then null. Use it to find
-        devices on a weak link or on an unexpected unit.
+        current Wi-Fi link rates in Mbit/s. The router measures signal only on
+        the gateway unit, so those fields are null for devices on satellites.
+        Use it to find devices on a weak link or on an unexpected unit.
         """
         return self._router.run("list client connections", _read_connections)
 

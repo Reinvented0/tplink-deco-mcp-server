@@ -26,6 +26,7 @@ _ACCESS = {
             "rxrate_5g": 780,
             "signal_level_2g": 0,
         },
+        {"mac": "AA-BB-CC-DD-EE-03", "signal_level_2g": 0, "rssi_in_dbm_2g": 0},
         "junk",
     ]
 }

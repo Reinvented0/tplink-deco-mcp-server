@@ -30,8 +30,8 @@ class ClientConnectionSummary(BaseModel):
         "steer this device to another unit.",
     )
     signal_level: int | None = Field(
-        description="Signal bars 0 (weak) to 3 (strong) on the current band; null when the "
-        "router does not report it for this device or it is wired.",
+        description="Signal bars 0 (weak) to 3 (strong) on the current band; only reported "
+        "for wireless devices on the gateway unit, null otherwise.",
     )
     signal_strength: int | None = Field(
         description="Router's raw RSSI figure on the current band (higher is stronger); null "
@@ -53,7 +53,9 @@ class ClientConnectionSummary(BaseModel):
     ) -> ClientConnectionSummary:
         """Combine a client of ``node`` with its ``client_access`` entry, if any."""
         suffix = _BAND_SUFFIX.get(client.connection_type)
-        wireless = suffix is not None and access is not None
+        # client_access only measures the gateway's own radios; for clients of a
+        # satellite it reports zeros (BE65 Pro) or stale values, so leave those out.
+        wireless = suffix is not None and access is not None and node.role == "master"
         return cls(
             mac=client.mac,
             name=client.name,
