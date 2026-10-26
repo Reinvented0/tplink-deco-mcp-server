@@ -16,6 +16,12 @@ READ_ONLY = ToolAnnotations(read_only_hint=True, open_world_hint=False)
 CHANGES_SETTINGS = ToolAnnotations(
     read_only_hint=False, destructive_hint=False, idempotent_hint=True, open_world_hint=False
 )
+RUNS_ACTION = ToolAnnotations(
+    read_only_hint=False, destructive_hint=False, idempotent_hint=False, open_world_hint=False
+)
+INTERRUPTS_NETWORK = ToolAnnotations(
+    read_only_hint=False, destructive_hint=True, idempotent_hint=False, open_world_hint=False
+)
 DISCARDS_SETTINGS = ToolAnnotations(
     read_only_hint=False, destructive_hint=True, idempotent_hint=True, open_world_hint=False
 )

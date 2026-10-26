@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from typing import TYPE_CHECKING
 
 import pytest
@@ -16,6 +17,9 @@ _READ_ONLY_TOOLS = {
     "get_router_performance",
     "get_system_log",
     "read_router_form",
+    "get_speedtest_result",
+    "list_client_connections",
+    "get_mesh_placement",
     "get_internet_status",
     "get_wifi_configuration",
     "list_clients",
@@ -23,6 +27,8 @@ _READ_ONLY_TOOLS = {
     "list_address_reservations",
 }
 _WRITE_TOOLS = {
+    "start_speedtest",
+    "set_client_roaming",
     "update_client",
     "remove_client",
     "block_client",
@@ -67,3 +73,19 @@ def test_serves_a_health_endpoint(router: RouterSession) -> None:
 
     assert response.status_code == 200
     assert response.text == "ok"
+
+
+@pytest.mark.anyio
+async def test_publishes_reboot_only_when_allowed(router: RouterSession) -> None:
+    async with Client(build_server(router)) as client:
+        default_tools = {tool.name for tool in (await client.list_tools()).tools}
+
+    allowed = type(router)(replace(router.settings, allow_reboot=True))
+    async with Client(build_server(allowed)) as client:
+        reboot = next(
+            tool for tool in (await client.list_tools()).tools if tool.name == "reboot_deco_nodes"
+        )
+
+    assert "reboot_deco_nodes" not in default_tools
+    assert reboot.annotations is not None
+    assert reboot.annotations.destructive_hint is True

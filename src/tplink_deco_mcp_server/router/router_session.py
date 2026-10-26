@@ -46,6 +46,11 @@ class RouterSession:
         self._client: DecoClient | None = None
         self._lock = threading.Lock()
 
+    @property
+    def settings(self) -> RouterSettings:
+        """The settings this session logs in with."""
+        return self._settings
+
     def run[T](self, action: str, operation: Callable[[DecoClient], T]) -> T:
         """Run ``operation`` against the router, turning every failure into a ``ToolError``.
 

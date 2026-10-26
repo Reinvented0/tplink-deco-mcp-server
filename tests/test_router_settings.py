@@ -51,3 +51,14 @@ def test_rejects_an_invalid_timeout(timeout: str, reason: str) -> None:
 
     with pytest.raises(ValueError, match=reason):
         RouterSettings.from_environment(environment)
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"), [("1", True), ("true", True), ("", False), ("0", False)]
+)
+def test_reads_the_reboot_opt_in(value: str, *, expected: bool) -> None:
+    settings = RouterSettings.from_environment(
+        {"DECO_HOST": "192.168.68.1", "DECO_PASSWORD": "secret", "DECO_ALLOW_REBOOT": value}
+    )
+
+    assert settings.allow_reboot is expected

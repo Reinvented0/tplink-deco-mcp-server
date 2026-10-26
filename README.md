@@ -19,6 +19,10 @@ SDK — no cloud account involved.
 | `get_router_performance` | Gateway CPU and memory usage, online clients and total traffic right now. |
 | `get_internet_status` | WAN cable, IPv4/IPv6 connection state, public address, gateway and DNS. |
 | `get_system_log` | One page of the router's system log (newest by default): time, facility, level, process and message, filterable by minimum severity. |
+| `list_client_connections` | Every online device with the Deco unit it is on, roaming on/off, and (where reported) signal bars, RSSI and Wi-Fi link rates. |
+| `get_mesh_placement` | The router's own grade (`good`/`fair`/`poor`) for where the Deco units stand. |
+| `get_speedtest_result` | The gateway's last WAN speed test: download/upload in Mbit/s, ping, jitter, when. |
+| `read_router_form` | Read-only escape hatch: any `admin/device`, `client`, `network` or `wireless` form verbatim. |
 | `get_wifi_configuration` | Every SSID (main, guest, IoT, MLO) with its bands, plus each radio's channel settings. Passwords only with `include_passwords: true`. |
 | `list_clients` | Devices known to the mesh: name, MAC, IP, network, band, category, current traffic. Filter: `online_only`. |
 | `update_client` | Rename a device and optionally change its category. |
@@ -27,6 +31,9 @@ SDK — no cloud account involved.
 | `block_client` / `unblock_client` | Cut a device off from the internet, or let it back in. |
 | `list_address_reservations` | Fixed IPs reserved by the DHCP server, with the device names. |
 | `add_address_reservation` / `update_address_reservation` / `remove_address_reservation` | Reserve, move or release a device's fixed IP. |
+| `set_client_roaming` | The Deco app's per-device Mesh Technology switch: stop or allow steering a device to another unit. |
+| `start_speedtest` | Start a WAN speed test on the gateway (saturates the line for about a minute). |
+| `reboot_deco_nodes` | Restart Deco units. Only offered when `DECO_ALLOW_REBOOT=1`. |
 
 Tools that change settings are annotated as such, so clients can ask for
 confirmation before running them.
@@ -49,6 +56,7 @@ The server reads the router credentials from environment variables:
 | `DECO_PASSWORD` | yes | — (the router's local admin password) |
 | `DECO_USERNAME` | no | `admin` |
 | `DECO_TIMEOUT` | no | `10` (seconds per router request) |
+| `DECO_ALLOW_REBOOT` | no | off (`1` offers `reboot_deco_nodes`) |
 
 > [!NOTE]
 > The router keeps a single session per account. Every login — from this

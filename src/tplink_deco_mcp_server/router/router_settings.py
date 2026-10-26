@@ -20,10 +20,11 @@ class RouterSettings:
     password: str = field(repr=False)
     username: str = _DEFAULT_USERNAME
     timeout_seconds: float = _DEFAULT_TIMEOUT_SECONDS
+    allow_reboot: bool = False
 
     @classmethod
     def from_environment(cls, environment: Mapping[str, str]) -> RouterSettings:
-        """Read ``DECO_HOST``, ``DECO_PASSWORD``, ``DECO_USERNAME`` and ``DECO_TIMEOUT``."""
+        """Read the ``DECO_*`` variables: host, password, username, timeout, allow-reboot."""
         host = environment.get("DECO_HOST", "").strip()
         password = environment.get("DECO_PASSWORD", "")
         if not host or not password:
@@ -34,6 +35,8 @@ class RouterSettings:
             password=password,
             username=environment.get("DECO_USERNAME", "").strip() or _DEFAULT_USERNAME,
             timeout_seconds=_parse_timeout(environment.get("DECO_TIMEOUT", "")),
+            allow_reboot=environment.get("DECO_ALLOW_REBOOT", "").strip().lower()
+            in {"1", "true", "yes"},
         )
 
 

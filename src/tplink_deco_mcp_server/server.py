@@ -12,9 +12,12 @@ from .tools import (
     AddressReservationTools,
     BlocklistTools,
     ClientTools,
+    ConnectionTools,
     InternetTools,
     MeshTools,
     RawTools,
+    RebootTools,
+    SpeedtestTools,
     SystemLogTools,
     WifiTools,
 )
@@ -55,6 +58,9 @@ def build_server(router: RouterSession) -> MCPServer[None]:
         AddressReservationTools(router),
         SystemLogTools(router),
         RawTools(router),
+        ConnectionTools(router),
+        SpeedtestTools(router),
+        RebootTools(router),
     )
     for tool_group in tool_groups:
         tool_group.register(server)

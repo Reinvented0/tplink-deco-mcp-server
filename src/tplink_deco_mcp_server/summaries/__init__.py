@@ -4,6 +4,11 @@ from __future__ import annotations
 
 from .address_reservation_summary import AddressReservationSummary, AddressReservationTableSummary
 from .blocked_client_summary import BlockedClientSummary
+from .client_connection_summary import (
+    ClientConnectionSummary,
+    MeshPlacementSummary,
+    RoamingChangeSummary,
+)
 from .client_summary import ClientSummary
 from .internet_status_summary import (
     InternetStatusSummary,
@@ -13,6 +18,7 @@ from .internet_status_summary import (
 )
 from .node_summary import NodeSummary
 from .performance_summary import PerformanceSummary
+from .speedtest_summary import SpeedtestSummary
 from .system_log_summary import (
     SeveritySummary,
     SystemLogEntrySummary,
@@ -29,13 +35,17 @@ __all__ = [
     "AddressReservationSummary",
     "AddressReservationTableSummary",
     "BlockedClientSummary",
+    "ClientConnectionSummary",
     "ClientSummary",
     "InternetStatusSummary",
     "IpConnectionSummary",
     "LanAddressSummary",
+    "MeshPlacementSummary",
     "NodeSummary",
     "PerformanceSummary",
+    "RoamingChangeSummary",
     "SeveritySummary",
+    "SpeedtestSummary",
     "SystemLogEntrySummary",
     "SystemLogSummary",
     "WanAddressSummary",

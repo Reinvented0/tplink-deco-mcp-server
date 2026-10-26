@@ -23,7 +23,8 @@ docstrings, logging, error format, commit conventions and releasing live there.
   contract.
 - `tools/` — one class per router feature (`MeshTools`, `InternetTools`,
   `WifiTools`, `ClientTools`, `BlocklistTools`, `AddressReservationTools`,
-  `SystemLogTools`). Each
+  `SystemLogTools`, `ConnectionTools`, `SpeedtestTools`, `RebootTools` (only with
+  `DECO_ALLOW_REBOOT`), `RawTools`). Each
   method is a tool; `register()` publishes them through `register_tool`.
 - `server.py` builds the `MCPServer` (instructions, tool groups, `/healthz`);
   `cli.py` is the `tplink-deco-mcp-server` entry point.
