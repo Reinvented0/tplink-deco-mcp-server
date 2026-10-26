@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 # `content`, e.g. "Mon Oct 26 13:57:02 2026 daemon.notice pppd[18932]: len < 0".
 _SYSLOG_LINE = re.compile(
     r"^(?P<time>\w{3} \w{3} +\d{1,2} \d{2}:\d{2}:\d{2} \d{4}) "
-    r"(?P<facility>\w+)\.(?P<level>\w+) (?P<source>[^:]+): (?P<message>.*)$",
+    r"(?P<facility>\w+)\.(?P<level>\w+) (?P<source>[^:]*): ?(?P<message>.*)$",
     re.DOTALL,
 )
 

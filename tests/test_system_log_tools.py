@@ -65,7 +65,11 @@ async def test_keeps_structured_fields_and_skips_junk(
 ) -> None:
     deco.get_log_types.return_value = _severities()
     structured = {"time": "12:38:31", "level": "INFO", "type": "PPP", "content": "PPPoE up"}
-    deco.request.side_effect = [{}, _page(structured, {"content": None}, "junk", total=1)]
+    sourceless = {"content": "Mon Oct 26 15:47:19 2026 user.emerg : tp215,22[2338]:"}
+    deco.request.side_effect = [
+        {},
+        _page(structured, sourceless, {"content": None}, "junk", total=1),
+    ]
 
     result = await call_tool("get_system_log", severity=8)
 
@@ -78,6 +82,13 @@ async def test_keeps_structured_fields_and_skips_junk(
             "level": "INFO",
             "source": "PPP",
             "message": "PPPoE up",
+        },
+        {
+            "time": "Mon Oct 26 15:47:19 2026",
+            "facility": "user",
+            "level": "emerg",
+            "source": "",
+            "message": "tp215,22[2338]:",
         },
         {"time": "", "facility": "", "level": "", "source": "", "message": ""},
     ]
